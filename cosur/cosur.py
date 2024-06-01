@@ -16,7 +16,6 @@ class CosurCard(ttk.Frame):
         self.background_label = tk.Label(self, image=self.background_image)
         self.background_label.place(relwidth=1, relheight=1)
 
-
         self.canvas = tk.Canvas(self, width=900, height=600, bd=0, highlightthickness=0)
         self.canvas.pack(fill="both", expand=True)
         self.canvas.create_image(0, 0, image=self.background_image, anchor="nw")
@@ -26,18 +25,15 @@ class CosurCard(ttk.Frame):
         self.logo_image = self.logo_image.subsample(7)
         self.canvas.create_image(0, 0, image=self.logo_image, anchor="nw")
 
-
         # titulo
         self.canvas.create_text(180, 40, text="COSUR", font=("Helvetica", 32), fill="red")
-        content = ttk.Frame(self, style="Content.TFrame")
-        content.place(relx=0.5, rely=0.5, anchor="center")
 
-        self.create_button(content, "Navegar al paciente")
-        self.create_button(content, "Navegar al hospital", side="right")
+        self.create_button(self.canvas, "Navegar al paciente", 0)
+        self.create_button(self.canvas, "Navegar al hospital", 1)
 
-    def create_button(self, parent, text, side="left"):
+    def create_button(self, parent, text, row):
         button = ttk.Button(parent, text=text, style="Content.TButton")
-        button.pack(side=side, padx=(0, 5)) if side == "left" else button.pack(side=side, padx=(5, 0))
+        button.place(x=50, y=150 + row * 60)
 
 
 # Application setup
@@ -45,6 +41,7 @@ root = tk.Tk()
 
 # Define styles
 style = ttk.Style()
+style.configure("Content.TFrame", background="transparent")
 style.configure("Content.TButton", font=("Helvetica", 14), anchor="center", background="red", relief="flat")
 
 # Create and place the custom card
