@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from pacientes import show_patient_screen
+from hospitales import show_hospital_screen
 
 class CosurCard(ttk.Frame):
 
@@ -23,30 +25,42 @@ class CosurCard(ttk.Frame):
         # Colocar el logo
         self.logo_image = tk.PhotoImage(file="imagenes/logo.png")
         self.logo_image = self.logo_image.subsample(7)
-        self.canvas.create_image(0, 0, image=self.logo_image, anchor="nw")
+        self.canvas.create_image(10, 10, image=self.logo_image, anchor="nw")
 
-        # titulo
-        self.canvas.create_text(180, 40, text="COSUR", font=("Helvetica", 32), fill="red")
+        # Título
+        self.canvas.create_text(120, 50, text="COSUR", font=("Helvetica", 32, "bold"), fill="red", anchor="w")
 
+        # Agregar textos informativos a la derecha
+        self.canvas.create_text(750, 100, text="¡Salvando Vidas con Eficiencia!", font=("Helvetica", 18, "bold"), fill="black", anchor="e")
+        self.canvas.create_text(750, 150, text="Navega rápidamente a pacientes y hospitales\ncon nuestro sistema de rutas optimizadas.", font=("Helvetica", 14), fill="black", anchor="e")
+        self.canvas.create_text(750, 220, text="Rutas optimizadas en tiempo real.\nAsignación rápida y precisa de ambulancias.\nMonitoreo en vivo y actualizaciones instantáneas.", font=("Helvetica", 12), fill="black", justify="right", anchor="e")
+        self.canvas.create_text(750, 300, text="Comienza ahora y reduce los tiempos de respuesta.", font=("Helvetica", 14, "bold"), fill="black", anchor="e")
+
+        # Crear botones
         self.create_button(self.canvas, "Navegar al paciente", 0)
         self.create_button(self.canvas, "Navegar al hospital", 1)
 
+
     def create_button(self, parent, text, row):
-        button = ttk.Button(parent, text=text, style="Content.TButton")
+        if text == "Navegar al paciente":
+            button = ttk.Button(parent, text=text, style="Content.TButton", command=show_patient_screen)
+        elif text == "Navegar al hospital":
+            button = ttk.Button(parent, text=text, style="Content.TButton", command=show_hospital_screen)
+        else:
+            button = ttk.Button(parent, text=text, style="Content.TButton")
         button.place(x=50, y=150 + row * 60)
 
-
-# Application setup
+# Configuración de la aplicación
 root = tk.Tk()
 
-# Define styles
+# Definir estilos
 style = ttk.Style()
 style.configure("Content.TFrame", background="transparent")
 style.configure("Content.TButton", font=("Helvetica", 14), anchor="center", background="red", relief="flat")
 
-# Create and place the custom card
+# Crear y colocar la tarjeta personalizada
 card = CosurCard(root)
 card.pack(fill="both", expand=True, pady=20, padx=20)
 
-# Run
+# Ejecutar la aplicación
 root.mainloop()
