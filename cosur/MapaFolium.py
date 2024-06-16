@@ -35,7 +35,8 @@ def dijkstra(edges, start, end):
         if dest not in graph:
             graph[dest] = []
         graph[src].append((dest, weight))
-        graph[dest].append((src, weight))  # Añadir conexión bidireccional
+        graph[dest].append((src, weight))
+
 
     queue = [(0, start, [])]
     visited = set()
