@@ -4,11 +4,26 @@ import webview
 import random
 import heapq
 import geopandas as gpd
+import requests
+import polyline
 from math import radians, sin, cos, sqrt, atan2
 
+# Función para obtener la ruta entre dos puntos utilizando la API de Directions de Google Maps
+def get_route(start, end, api_key):
+    start = f"{start[0]},{start[1]}"
+    end = f"{end[0]},{end[1]}"
+    url = f"https://maps.googleapis.com/maps/api/directions/json?origin={start}&destination={end}&key={api_key}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        return None
+    data = response.json()
+    route = data["routes"][0]["overview_polyline"]["points"]
+    route = polyline.decode(route)
+    return route
+
 # Coordenadas aproximadas de Lima, Perú
-lima_lat_range = (-12.05, -12.0)  # Ajuste para asegurar que esté dentro de la ciudad
-lima_lon_range = (-77.1, -77.0)  # Ajuste para asegurar que esté dentro de la ciudad
+lima_lat_range = (-12.05, -12.0)
+lima_lon_range = (-77.1, -77.0)
 
 # Crear el mapa centrado en Lima, Perú usando Folium
 mapa = folium.Map(location=[-12.0464, -77.0428], zoom_start=12)
@@ -27,7 +42,7 @@ for center in centros_medicos_locations:
 
 # Crear nodo de paciente (amarillo) en Lima, Perú
 patient_node = (random.uniform(lima_lat_range[0], lima_lat_range[1]),
-                random.uniform(lima_lon_range[0], lima_lon_range[1]))  # Coordenadas aleatorias dentro de Lima
+                random.uniform(lima_lon_range[0], lima_lon_range[1]))
 
 # Marcar al paciente en el mapa
 folium.Marker(location=patient_node, icon=folium.Icon(color='orange')).add_to(mapa)
@@ -80,11 +95,12 @@ for center in centros_medicos_locations:
         min_distance = distance
         closest_medical_center = center
 
-# Calcular la ruta más corta desde el paciente hasta el centro médico más cercano
+# Calcular la ruta desde el paciente hasta el centro médico más cercano utilizando la API de Directions de Google Maps
 if closest_medical_center:
-    _, path = dijkstra(graph, patient_node, closest_medical_center)
-    if path:
-        folium.PolyLine(locations=path, color='green').add_to(mapa)
+    route = get_route(patient_node, closest_medical_center, "AIzaSyDQJ5-AjJ8XixZmf7OiezCOOEfu4W4XSOc")
+    if route:
+        folium.PolyLine(locations=route, color='green').add_to(mapa)
+
 
 # Marcar el centro médico más cercano al paciente en el mapa
 if closest_medical_center:
