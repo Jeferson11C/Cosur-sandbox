@@ -29,6 +29,7 @@ def show_hospital_screen():
     hospital_listbox.bind("<Double-Button-1>", on_hospital_click)  # Evento de doble clic en un hospital
 
 
+
 # Ejemplo de uso:
 if __name__ == "__main__":
     root = tk.Tk()

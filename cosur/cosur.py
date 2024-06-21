@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from pacientes import show_patient_screen
 from hospitales import show_hospital_screen
+from creditos import show_member_screen
 
 class CosurCard(ttk.Frame):
 
@@ -39,16 +40,24 @@ class CosurCard(ttk.Frame):
         # Crear botones
         self.create_button(self.canvas, "Navegar al paciente", 0)
         self.create_button(self.canvas, "Navegar al hospital", 1)
-
+        self.create_button(self.canvas, "Creditos", 2)
 
     def create_button(self, parent, text, row):
-        if text == "Navegar al paciente":
-            button = ttk.Button(parent, text=text, style="Content.TButton", command=show_patient_screen)
-        elif text == "Navegar al hospital":
-            button = ttk.Button(parent, text=text, style="Content.TButton", command=show_hospital_screen)
-        else:
-            button = ttk.Button(parent, text=text, style="Content.TButton")
-        button.place(x=50, y=150 + row * 60)
+        try:
+            if text == "Navegar al paciente":
+                button = ttk.Button(parent, text=text, style="Content.TButton", command=show_patient_screen)
+                button.place(x=50, y=150 + row * 60)
+            elif text == "Navegar al hospital":
+                button = ttk.Button(parent, text=text, style="Content.TButton", command=show_hospital_screen)
+                button.place(x=50, y=150 + row * 60)
+            elif text == "Creditos":
+                button = ttk.Button(parent, text=text, style="Content.TButton", command=show_member_screen)
+                button.place(x=50, y=500)
+            else:
+                button = ttk.Button(parent, text=text, style="Content.TButton")
+                button.place(x=50, y=150 + row * 60)
+        except Exception as e:
+            print(f"Error: {e}")
 
 # Configuración de la aplicación
 root = tk.Tk()
@@ -64,3 +73,4 @@ card.pack(fill="both", expand=True, pady=20, padx=20)
 
 # Ejecutar la aplicación
 root.mainloop()
+
