@@ -1,5 +1,8 @@
 import folium
 import os
+
+from pacientes import  patients
+
 import webview
 import random
 import heapq
@@ -46,6 +49,8 @@ patient_node = (random.uniform(lima_lat_range[0], lima_lat_range[1]),
 
 # Marcar al paciente en el mapa
 folium.Marker(location=patient_node, icon=folium.Icon(color='orange')).add_to(mapa)
+
+
 
 # Función de Haversine para calcular la distancia entre dos puntos geográficos
 def haversine(coord1, coord2):
@@ -101,6 +106,24 @@ for center_coord in closest_medical_centers:
     folium.Marker(location=center_coord, icon=folium.Icon(color='green')).add_to(mapa)
 
 
+# Para cada paciente en la lista de pacientes por defecto
+for paciente in patients:
+    # Obtener la ubicación del paciente
+    patient_location = paciente.get_location()
+
+    # Comprobar si patient_location es None
+    if patient_location is not None:
+        # Crear un marcador en la ubicación del paciente
+        patient_marker = folium.Marker(location=patient_location,
+                                       popup=folium.Popup(paciente.direccion, max_width=250),
+                                       icon=folium.Icon(color='red'))
+
+        # Añadir el marcador al mapa
+        patient_marker.add_to(mapa)
+    else:
+        print(f"No se pudo obtener la ubicación para el paciente: {paciente.nombre}")
+
+
 
 
 # Función para calcular la distancia a lo largo de la ruta vehicular entre dos puntos
@@ -133,9 +156,8 @@ for center_coord in closest_medical_centers:
             min_distance_along_route = total_distance_along_route  # Corrección aquí
             closest_medical_center_along_route = center_coord
 
-# Marcar el centro médico más cercano al paciente a lo largo de la ruta vehicular en el mapa
-if closest_medical_center_along_route:
-    folium.Marker(location=closest_medical_center_along_route, icon=folium.Icon(color='purple')).add_to(mapa)
+# Encontrar los 2 centros médicos más cercanos al paciente
+closest_medical_centers = heapq.nsmallest(2, centros_medicos_locations, key=lambda coord: haversine(patient_node, coord))
 
 
 # Calcular la ruta desde el paciente hasta el centro médico más cercano a lo largo de la ruta vehicular utilizando la API de Directions de Google Maps
@@ -147,21 +169,17 @@ if closest_medical_center_along_route:
 
 
 
-# Calcular la ruta desde el paciente hasta el centro médico más cercano utilizando la API de Directions de Google Maps
-if closest_medical_center:
-    route = get_route(patient_node, closest_medical_center, "AIzaSyDQJ5-AjJ8XixZmf7OiezCOOEfu4W4XSOc")
+# Calcular la ruta desde el paciente hasta el primer centro médico más cercano utilizando la API de Directions de Google Maps
+if closest_medical_centers:
+    route = get_route(patient_node, closest_medical_centers[0], "AIzaSyDQJ5-AjJ8XixZmf7OiezCOOEfu4W4XSOc")
     if route:
         folium.PolyLine(locations=route, color='purple').add_to(mapa)
 
-# Marcar el centro médico más cercano al paciente en el mapa
-if closest_medical_center:
-    folium.Marker(location=closest_medical_center, icon=folium.Icon(color='blue')).add_to(mapa)
-
-
-
-
-
-
+# Calcular la ruta desde el paciente hasta el segundo centro médico más cercano utilizando la API de Directions de Google Maps
+if len(closest_medical_centers) > 1:
+    route = get_route(patient_node, closest_medical_centers[1], "AIzaSyDQJ5-AjJ8XixZmf7OiezCOOEfu4W4XSOc")
+    if route:
+        folium.PolyLine(locations=route, color='red').add_to(mapa)
 
 # Calcular la ruta desde el paciente hasta el centro médico más cercano utilizando la API de Directions de Google Maps
 if closest_medical_center:

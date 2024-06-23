@@ -3,6 +3,7 @@ from tkinter import ttk
 from pacientes import show_patient_screen
 from hospitales import show_hospital_screen
 from creditos import show_member_screen
+from mi_ubicacion import show_current_location
 
 class CosurCard(ttk.Frame):
 
@@ -41,6 +42,9 @@ class CosurCard(ttk.Frame):
         self.create_button(self.canvas, "Navegar al paciente", 0)
         self.create_button(self.canvas, "Navegar al hospital", 1)
         self.create_button(self.canvas, "Creditos", 2)
+        self.create_button(self.canvas, "Mi ubicación", 3)
+
+
 
     def create_button(self, parent, text, row):
         try:
@@ -52,6 +56,9 @@ class CosurCard(ttk.Frame):
                 button.place(x=50, y=150 + row * 60)
             elif text == "Creditos":
                 button = ttk.Button(parent, text=text, style="Content.TButton", command=show_member_screen)
+                button.place(x=50, y=500)
+            elif text == "Creditos":
+                button = ttk.Button(parent, text=text, style="Content.TButton", command=show_current_location)
                 button.place(x=50, y=500)
             else:
                 button = ttk.Button(parent, text=text, style="Content.TButton")
@@ -73,4 +80,3 @@ card.pack(fill="both", expand=True, pady=20, padx=20)
 
 # Ejecutar la aplicación
 root.mainloop()
-
