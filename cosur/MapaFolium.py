@@ -1,5 +1,8 @@
 import folium
 import os
+
+from pacientes import  patients
+
 import webview
 import random
 import heapq
@@ -46,6 +49,8 @@ patient_node = (random.uniform(lima_lat_range[0], lima_lat_range[1]),
 
 # Marcar al paciente en el mapa
 folium.Marker(location=patient_node, icon=folium.Icon(color='orange')).add_to(mapa)
+
+
 
 # Función de Haversine para calcular la distancia entre dos puntos geográficos
 def haversine(coord1, coord2):
@@ -99,6 +104,24 @@ closest_medical_centers = heapq.nsmallest(10, centros_medicos_locations, key=lam
 # Pintar los 10 centros médicos más cercanos de color verde
 for center_coord in closest_medical_centers:
     folium.Marker(location=center_coord, icon=folium.Icon(color='green')).add_to(mapa)
+
+
+# Para cada paciente en la lista de pacientes por defecto
+for paciente in patients:
+    # Obtener la ubicación del paciente
+    patient_location = paciente.get_location()
+
+    # Comprobar si patient_location es None
+    if patient_location is not None:
+        # Crear un marcador en la ubicación del paciente
+        patient_marker = folium.Marker(location=patient_location,
+                                       popup=folium.Popup(paciente.direccion, max_width=250),
+                                       icon=folium.Icon(color='red'))
+
+        # Añadir el marcador al mapa
+        patient_marker.add_to(mapa)
+    else:
+        print(f"No se pudo obtener la ubicación para el paciente: {paciente.nombre}")
 
 
 
