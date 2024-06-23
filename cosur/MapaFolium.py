@@ -156,9 +156,8 @@ for center_coord in closest_medical_centers:
             min_distance_along_route = total_distance_along_route  # Corrección aquí
             closest_medical_center_along_route = center_coord
 
-# Marcar el centro médico más cercano al paciente a lo largo de la ruta vehicular en el mapa
-if closest_medical_center_along_route:
-    folium.Marker(location=closest_medical_center_along_route, icon=folium.Icon(color='purple')).add_to(mapa)
+# Encontrar los 2 centros médicos más cercanos al paciente
+closest_medical_centers = heapq.nsmallest(2, centros_medicos_locations, key=lambda coord: haversine(patient_node, coord))
 
 
 # Calcular la ruta desde el paciente hasta el centro médico más cercano a lo largo de la ruta vehicular utilizando la API de Directions de Google Maps
@@ -170,21 +169,17 @@ if closest_medical_center_along_route:
 
 
 
-# Calcular la ruta desde el paciente hasta el centro médico más cercano utilizando la API de Directions de Google Maps
-if closest_medical_center:
-    route = get_route(patient_node, closest_medical_center, "AIzaSyDQJ5-AjJ8XixZmf7OiezCOOEfu4W4XSOc")
+# Calcular la ruta desde el paciente hasta el primer centro médico más cercano utilizando la API de Directions de Google Maps
+if closest_medical_centers:
+    route = get_route(patient_node, closest_medical_centers[0], "AIzaSyDQJ5-AjJ8XixZmf7OiezCOOEfu4W4XSOc")
     if route:
         folium.PolyLine(locations=route, color='purple').add_to(mapa)
 
-# Marcar el centro médico más cercano al paciente en el mapa
-if closest_medical_center:
-    folium.Marker(location=closest_medical_center, icon=folium.Icon(color='blue')).add_to(mapa)
-
-
-
-
-
-
+# Calcular la ruta desde el paciente hasta el segundo centro médico más cercano utilizando la API de Directions de Google Maps
+if len(closest_medical_centers) > 1:
+    route = get_route(patient_node, closest_medical_centers[1], "AIzaSyDQJ5-AjJ8XixZmf7OiezCOOEfu4W4XSOc")
+    if route:
+        folium.PolyLine(locations=route, color='red').add_to(mapa)
 
 # Calcular la ruta desde el paciente hasta el centro médico más cercano utilizando la API de Directions de Google Maps
 if closest_medical_center:
