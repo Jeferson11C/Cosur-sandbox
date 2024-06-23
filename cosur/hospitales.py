@@ -1,3 +1,4 @@
+
 import tkinter as tk
 import os
 
@@ -27,6 +28,7 @@ def show_hospital_screen():
             open_map()
 
     hospital_listbox.bind("<Double-Button-1>", on_hospital_click)  # Evento de doble clic en un hospital
+
 
 
 # Ejemplo de uso:
