@@ -19,17 +19,16 @@ class Paciente:
             print(f"Error al obtener la ubicación para la dirección: {self.direccion}. Error: {e}")
             return None
 
-# Crear una lista global de pacientes
-# Crear una lista global de pacientes con direcciones específicas en Lima
+
 patients = [
-    Paciente("Paciente 1", "Av. Javier Prado Este 4200, Lima 15023, Perú"),
-    Paciente("Paciente 2", "Av. Alfredo Mendiola 1400, Independencia 15311, Perú"),
-    Paciente("Paciente 3", "Av. La Marina 2000, San Miguel 15087, Perú")
+    Paciente("Luisa Paredes", "Av. Javier Prado Este 4200, Lima 15023, Perú"),
+    Paciente("Miguel Gutierres", "Av. Alfredo Mendiola 1400, Independencia 15311, Perú"),
+    Paciente("Luis Castillo", "Av. La Marina 2000, San Miguel 15087, Perú")
 ]
 
 def show_patient_screen():
     def open_map(patient):
-        os.system( f"python MapaFolium.py {patient.nombre} {patient.direccion}")  # Ejecutar MapaFolium.py al hacer clic en un paciente# Ejecutar MapaFolium.py al hacer clic en un paciente # Ejecutar MapaFolium.py al hacer clic en un paciente
+        os.system( f"python MapaFolium.py {patient.nombre} {patient.direccion}")
 
     patient_window = tk.Toplevel()
     patient_window.title("Pacientes")
@@ -37,9 +36,11 @@ def show_patient_screen():
 
     tk.Label(patient_window, text="Pacientes", font=("Helvetica", 32)).pack()
 
-    # Crear campos de entrada para el nombre y la dirección del paciente
+    tk.Label(patient_window, text="Nombre del paciente:").pack()
     patient_name_entry = tk.Entry(patient_window)
     patient_name_entry.pack()
+
+    tk.Label(patient_window, text="Dirección del paciente:").pack()
     patient_address_entry = tk.Entry(patient_window)
     patient_address_entry.pack()
 
