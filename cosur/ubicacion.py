@@ -95,4 +95,3 @@ def get_miubicacion_location():
     root.mainloop()
 
 
-get_miubicacion_location()

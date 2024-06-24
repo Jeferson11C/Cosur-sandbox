@@ -3,7 +3,7 @@ from tkinter import ttk
 from pacientes import show_patient_screen
 from hospitales import show_hospital_screen
 from creditos import show_member_screen
-from mi_ubicacion import show_current_location
+from ubicacion import get_miubicacion_location
 
 class CosurCard(ttk.Frame):
 
@@ -54,15 +54,12 @@ class CosurCard(ttk.Frame):
             elif text == "Navegar al hospital":
                 button = ttk.Button(parent, text=text, style="Content.TButton", command=show_hospital_screen)
                 button.place(x=50, y=150 + row * 60)
+            elif text == "Mi ubicación":
+                button = ttk.Button(parent, text=text, style="Content.TButton", command=get_miubicacion_location)
+                button.place(x=50, y=150 + row * 60 )
             elif text == "Creditos":
                 button = ttk.Button(parent, text=text, style="Content.TButton", command=show_member_screen)
-                button.place(x=50, y=500)
-            elif text == "Creditos":
-                button = ttk.Button(parent, text=text, style="Content.TButton", command=show_current_location)
-                button.place(x=50, y=500)
-            else:
-                button = ttk.Button(parent, text=text, style="Content.TButton")
-                button.place(x=50, y=150 + row * 60)
+                button.place(x=50, y=350 + row * 60)
         except Exception as e:
             print(f"Error: {e}")
 
