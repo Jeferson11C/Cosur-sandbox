@@ -22,9 +22,9 @@ class Paciente:
 # Crear una lista global de pacientes
 # Crear una lista global de pacientes con direcciones específicas en Lima
 patients = [
-    Paciente("Paciente 1", "Av. Javier Prado Este 4200, Lima 15023, Perú"),
-    Paciente("Paciente 2", "Av. Alfredo Mendiola 1400, Independencia 15311, Perú"),
-    Paciente("Paciente 3", "Av. La Marina 2000, San Miguel 15087, Perú")
+    Paciente("Alverto Maurio palta", "Av. Javier Prado Este 4200, Lima 15023, Perú"),
+    Paciente(" Tupac Amaru trollano", "Av. Alfredo Mendiola 1400, Independencia 15311, Perú"),
+    Paciente(" Mario Llirion de los torres", "Av. La Marina 2000, San Miguel 15087, Perú")
 ]
 
 def show_patient_screen():
