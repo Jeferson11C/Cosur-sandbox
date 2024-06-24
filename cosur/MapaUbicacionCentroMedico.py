@@ -40,7 +40,7 @@ def get_route(api_key, origin, destination):
             route.append((lat, lon))
         return route
     else:
-        print("Error en la obtención de la ruta:", directions["st atus"])
+        print("Error en la obtención de la ruta:", directions["status"])
         return []
 
 def show_current_location(api_key, geojson_path):
@@ -49,7 +49,7 @@ def show_current_location(api_key, geojson_path):
 
     # Aquí necesitas una manera válida de obtener la ubicación actual.
     # Por simplicidad, usaremos una ubicación fija.
-    location = geolocator.geocode("estacion_bayovar")  # Reemplaza con una ubicación válida o con un método para obtener la ubicación actual
+    location = geolocator.geocode("callao,estaciom_bayovar")  # Reemplaza con una ubicación válida o con un método para obtener la ubicación actual
 
     # Verificar si geolocator pudo obtener la ubicación
     if location is None:
