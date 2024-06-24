@@ -1,9 +1,36 @@
+import requests
+import os
 import tkinter as tk
+import random
 from tkinter import ttk
 from pacientes import show_patient_screen
 from hospitales import show_hospital_screen
 from creditos import show_member_screen
-from mi_ubicacion import show_current_location
+from ubicacion import show_map
+def get_current_location():
+    # Tu API key de Google
+    google_api_key = "AIzaSyDQJ5-AjJ8XixZmf7OiezCOOEfu4W4XSOc"
+
+    # URL de la API de Geolocalización de Google
+    url = "https://www.googleapis.com/geolocation/v1/geolocate?key=" + google_api_key
+
+    # Hacer una solicitud POST a la API de Geolocalización de Google
+    response = requests.post(url)
+
+    # Verificar si la solicitud fue exitosa
+    if response.status_code == 200:
+        # Obtener el resultado de la API
+        result = response.json()
+
+        # Obtener la latitud y longitud de la ubicación
+        lat = result["location"]["lat"]
+        lon = result["location"]["lng"]
+
+        return lat, lon
+    else:
+        print(f"Error: {response.text}")
+        return None
+
 
 class CosurCard(ttk.Frame):
 
@@ -44,9 +71,14 @@ class CosurCard(ttk.Frame):
         self.create_button(self.canvas, "Creditos", 2)
         self.create_button(self.canvas, "Mi ubicación", 3)
 
+    def create_button(self, parent, text, row, patient=None):
+        def open_map():
+            # Obtener la ubicación actual
+            lat, lon = get_current_location()
 
+            # Ejecutar el script MapaFolium.py con la ubicación actual
+            os.system(f"python MapaFolium.py {lat} {lon}")
 
-    def create_button(self, parent, text, row):
         try:
             if text == "Navegar al paciente":
                 button = ttk.Button(parent, text=text, style="Content.TButton", command=show_patient_screen)
@@ -56,15 +88,18 @@ class CosurCard(ttk.Frame):
                 button.place(x=50, y=150 + row * 60)
             elif text == "Creditos":
                 button = ttk.Button(parent, text=text, style="Content.TButton", command=show_member_screen)
-                button.place(x=50, y=500)
-            elif text == "Creditos":
-                button = ttk.Button(parent, text=text, style="Content.TButton", command=show_current_location)
-                button.place(x=50, y=500)
+                button.place(x=50, y=150 + row * 60)
+            elif text == "Mi ubicación":
+                button = ttk.Button(parent, text=text, style="Content.TButton", command=show_map)
+                button.place(x=50, y=150 + (
+                            row + 1) * 60)  # Colocar el botón "Mi ubicación" justo debajo del botón "Creditos"
             else:
                 button = ttk.Button(parent, text=text, style="Content.TButton")
                 button.place(x=50, y=150 + row * 60)
         except Exception as e:
             print(f"Error: {e}")
+
+
 
 # Configuración de la aplicación
 root = tk.Tk()
